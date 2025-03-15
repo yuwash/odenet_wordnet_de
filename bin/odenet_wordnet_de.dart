@@ -17,6 +17,13 @@ ArgParser buildParser() {
       negatable: false,
       help: 'Show additional command output.',
     )
+    ..addOption(
+      'part-of-speech',
+      abbr: 'p',
+      allowed: PartOfSpeech.values.map((e) => e.name),
+      help:
+          'Filter lexical entries by part of speech (${PartOfSpeech.values.map((e) => e.name).join(', ')}).',
+    )
     ..addFlag('version', negatable: false, help: 'Print the tool version.');
 }
 
@@ -46,12 +53,24 @@ void main(List<String> arguments) {
 
     // Act on the arguments provided.
     final resource = getDeWordNetLexicalResource();
-    print('Number of lexical entries: ${resource.lexicalEntries.length}');
-    print('Number of synsets: ${resource.synsets.length}');
+    final String? selectedPartOfSpeech = results['part-of-speech'];
 
-    for (var pos in PartOfSpeech.values) {
+    if (selectedPartOfSpeech == null) {
+      print('Number of lexical entries: ${resource.lexicalEntries.length}');
+      print('Number of synsets: ${resource.synsets.length}');
+
+      for (var p in PartOfSpeech.values) {
+        print(
+          'Number of ${partOfSpeechLabels[p]!} lexical entries: ${resource.findLexicalEntries(p).length}',
+        );
+      }
+    } else {
+      final PartOfSpeech partOfSpeech = PartOfSpeech.values.byName(
+        selectedPartOfSpeech,
+      );
       print(
-          'Number of ${partOfSpeechLabels[pos]!} lexical entries: ${resource.findLexicalEntries(pos).length}');
+        'Number of ${partOfSpeechLabels[partOfSpeech]!} lexical entries: ${resource.findLexicalEntries(partOfSpeech).length}',
+      );
     }
 
     if (verbose) {
