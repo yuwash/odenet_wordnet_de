@@ -1,4 +1,5 @@
 import 'package:args/args.dart';
+import 'package:odenet_wordnet_de/wordnet.dart';
 
 const String version = '0.0.1';
 
@@ -44,8 +45,12 @@ void main(List<String> arguments) {
     }
 
     // Act on the arguments provided.
-    print('Positional arguments: ${results.rest}');
+    final resource = getDeWordNetLexicalResource();
+    print('Number of lexical entries: ${resource.lexicalEntries.length}');
+    print('Number of synsets: ${resource.synsets.length}');
+
     if (verbose) {
+      print('Positional arguments: ${results.rest}');
       print('[VERBOSE] All arguments: ${results.arguments}');
     }
   } on FormatException catch (e) {
