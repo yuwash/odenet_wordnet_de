@@ -1,6 +1,22 @@
 import 'package:xml/xml.dart';
 import 'dart:io';
 
+// See https://globalwordnet.github.io/schemas/
+
+enum PartOfSpeech { n, v, a, r, s, c, p, x, u }
+
+const Map<PartOfSpeech, String> partOfSpeechLabels = {
+  PartOfSpeech.n: 'Noun',
+  PartOfSpeech.v: 'Verb',
+  PartOfSpeech.a: 'Adjective',
+  PartOfSpeech.r: 'Adverb',
+  PartOfSpeech.s: 'Adjective Satellite',
+  PartOfSpeech.c: 'Conjunction',
+  PartOfSpeech.p: 'Adposition',
+  PartOfSpeech.x: 'Other',
+  PartOfSpeech.u: 'Unknown',
+};
+
 class LexicalResource {
   final XmlDocument xmlDocument;
 
@@ -12,6 +28,12 @@ class LexicalResource {
 
   Iterable<XmlElement> get synsets {
     return xmlDocument.findAllElements('Synset');
+  }
+
+  Iterable<XmlElement> findLexicalEntries(PartOfSpeech partOfSpeech) {
+    return lexicalEntries.where((element) =>
+        element.findElements('Lemma').first.getAttribute('partOfSpeech') ==
+        partOfSpeech.name);
   }
 }
 

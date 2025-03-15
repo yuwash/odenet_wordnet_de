@@ -49,6 +49,11 @@ void main(List<String> arguments) {
     print('Number of lexical entries: ${resource.lexicalEntries.length}');
     print('Number of synsets: ${resource.synsets.length}');
 
+    for (var pos in PartOfSpeech.values) {
+      print(
+          'Number of ${partOfSpeechLabels[pos]!} lexical entries: ${resource.findLexicalEntries(pos).length}');
+    }
+
     if (verbose) {
       print('Positional arguments: ${results.rest}');
       print('[VERBOSE] All arguments: ${results.arguments}');
