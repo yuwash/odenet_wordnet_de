@@ -1,5 +1,7 @@
-Open German WordNet
-===================
+Open German WordNet (Dart)
+==========================
+
+Dart library for Open German WordNet.
 
 ## License
 
