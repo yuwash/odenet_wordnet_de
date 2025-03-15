@@ -24,7 +24,8 @@ ArgParser buildParser() {
       help:
           'Filter lexical entries by part of speech (${PartOfSpeech.values.map((e) => e.name).join(', ')}).',
     )
-    ..addFlag('version', negatable: false, help: 'Print the tool version.');
+    ..addFlag('version', negatable: false, help: 'Print the tool version.')
+    ..addCommand('lemma');
 }
 
 void printUsage(ArgParser argParser) {
@@ -53,24 +54,43 @@ void main(List<String> arguments) {
 
     // Act on the arguments provided.
     final resource = getDeWordNetLexicalResource();
+
     final String? selectedPartOfSpeech = results['part-of-speech'];
+    if (results.command?.name == 'lemma') {
+      Iterable<String> lemmaWrittenForms;
 
-    if (selectedPartOfSpeech == null) {
-      print('Number of lexical entries: ${resource.lexicalEntries.length}');
-      print('Number of synsets: ${resource.synsets.length}');
-
-      for (var p in PartOfSpeech.values) {
-        print(
-          'Number of ${partOfSpeechLabels[p]!} lexical entries: ${resource.findLexicalEntries(p).length}',
+      if (selectedPartOfSpeech == null) {
+        lemmaWrittenForms = resource.lexicalEntries.map(toLemmaWrittenForm);
+      } else {
+        final PartOfSpeech partOfSpeech = PartOfSpeech.values.byName(
+          selectedPartOfSpeech,
         );
+        lemmaWrittenForms = resource
+            .findLexicalEntries(partOfSpeech)
+            .map(toLemmaWrittenForm);
+      }
+
+      for (final entry in lemmaWrittenForms) {
+        print(entry);
       }
     } else {
-      final PartOfSpeech partOfSpeech = PartOfSpeech.values.byName(
-        selectedPartOfSpeech,
-      );
-      print(
-        'Number of ${partOfSpeechLabels[partOfSpeech]!} lexical entries: ${resource.findLexicalEntries(partOfSpeech).length}',
-      );
+      if (selectedPartOfSpeech == null) {
+        print('Number of lexical entries: ${resource.lexicalEntries.length}');
+        print('Number of synsets: ${resource.synsets.length}');
+
+        for (var p in PartOfSpeech.values) {
+          print(
+            'Number of ${partOfSpeechLabels[p]!} lexical entries: ${resource.findLexicalEntries(p).length}',
+          );
+        }
+      } else {
+        final PartOfSpeech partOfSpeech = PartOfSpeech.values.byName(
+          selectedPartOfSpeech,
+        );
+        print(
+          'Number of ${partOfSpeechLabels[partOfSpeech]!} lexical entries: ${resource.findLexicalEntries(partOfSpeech).length}',
+        );
+      }
     }
 
     if (verbose) {

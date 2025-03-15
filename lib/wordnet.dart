@@ -37,6 +37,10 @@ class LexicalResource {
   }
 }
 
+String toLemmaWrittenForm(XmlElement entry) {
+  return entry.findElements('Lemma').first.getAttribute('writtenForm')!;
+}
+
 LexicalResource getDeWordNetLexicalResource() {
   final file = File('wordnet/deWordNet.xml');
   final contents = file.readAsStringSync();
