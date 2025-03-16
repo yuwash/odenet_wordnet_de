@@ -14,7 +14,7 @@ The file is cached using `xdg_directories` thus only works on Linux.
 To use the `wordnet.dart` library:
 
 ```dart
-import 'package:odenet_wordnet_de/wordnet.dart';
+import 'package:odenet_wordnet_de/odenet_wordnet_de.dart';
 
 void main() async {
   await updateCachedDeWordNet();

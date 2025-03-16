@@ -1,7 +1,7 @@
 import 'package:args/args.dart';
-import 'package:odenet_wordnet_de/wordnet.dart';
+import 'package:odenet_wordnet_de/odenet_wordnet_de.dart';
 
-const String version = '0.0.1';
+const String version = '1.0.0';
 
 ArgParser buildParser() {
   return ArgParser()
