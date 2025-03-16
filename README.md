@@ -7,6 +7,8 @@ Uses `deWordNet.xml` from
 [hdaSprachtechnologie/odenet](https://github.com/hdaSprachtechnologie/odenet)
 in the [WordNet XML schema](https://globalwordnet.github.io/schemas/).
 
+The file is cached using `xdg_directories` thus only works on Linux.
+
 ## Usage
 
 To use the `wordnet.dart` library:
@@ -14,8 +16,9 @@ To use the `wordnet.dart` library:
 ```dart
 import 'package:odenet_wordnet_de/wordnet.dart';
 
-void main() {
-  final resource = getDeWordNetLexicalResource();
+void main() async {
+  await updateCachedDeWordNet();
+  final resource = await loadDeWordNetLexicalResource();
   print('Number of lexical entries: ${resource.lexicalEntries.length}');
 
   // Accessing lexical entries and synsets

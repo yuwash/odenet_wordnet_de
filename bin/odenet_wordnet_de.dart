@@ -33,7 +33,7 @@ void printUsage(ArgParser argParser) {
   print(argParser.usage);
 }
 
-void main(List<String> arguments) {
+void main(List<String> arguments) async {
   final ArgParser argParser = buildParser();
   try {
     final ArgResults results = argParser.parse(arguments);
@@ -53,7 +53,14 @@ void main(List<String> arguments) {
     }
 
     // Act on the arguments provided.
-    final resource = getDeWordNetLexicalResource();
+    LexicalResource resource;
+    try {
+      resource = await loadDeWordNetLexicalResource();
+    } catch (e) {
+      print('Updating cached deWordNet.xml from $deWordNetUrl...');
+      await updateCachedDeWordNet();
+      resource = await loadDeWordNetLexicalResource();
+    }
 
     final String? selectedPartOfSpeech = results['part-of-speech'];
     if (results.command?.name == 'lemma') {
